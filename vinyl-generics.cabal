@@ -15,21 +15,33 @@ cabal-version:       >=1.10
 
 library
   default-language:    Haskell2010
-  ghc-options:         -Wall
+  ghc-options:         -Wall 
   hs-source-dirs:      src
-  exposed-modules:     Lib
+  exposed-modules:     Data.Vinyl.Generics
+                     , Data.Vinyl.Generics.Transform
+  other-modules:       Data.Vinyl.Generics.Helpers
   build-depends:       base >= 4.7 && < 5
+                     , generics-sop 
+                     , vinyl >= 0.10
+                     , text 
+                     , template-haskell
+                     , singletons >= 2.4 && < 2.5
 
 test-suite spec
   default-language:    Haskell2010
-  ghc-options:         -Wall
+  ghc-options:         -Wall -ddump-splices -ddump-to-file
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
+  other-modules:       LibSpec
   build-depends:       base
                      , vinyl-generics
                      , hspec
+                     , hspec-core >=2.4.8
                      , QuickCheck
+                     , generics-sop 
+                     , text
+                     , vinyl
 
 source-repository head
   type:     git
