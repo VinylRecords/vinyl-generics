@@ -19,13 +19,11 @@ library
   hs-source-dirs:      src
   exposed-modules:     Data.Vinyl.Generics
                      , Data.Vinyl.Generics.Transform
-  other-modules:       Data.Vinyl.Generics.Helpers
   build-depends:       base >= 4.7 && < 5
                      , generics-sop 
                      , vinyl >= 0.10
                      , text 
-                     , template-haskell
-                     , singletons >= 2.4 && < 2.5
+                     , records-sop
 
 test-suite spec
   default-language:    Haskell2010
@@ -42,6 +40,8 @@ test-suite spec
                      , generics-sop 
                      , text
                      , vinyl
+                     
+                     
 
 source-repository head
   type:     git

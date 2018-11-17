@@ -1,48 +1,35 @@
-{-# LANGUAGE ConstraintKinds        #-}
-{-# LANGUAGE DataKinds              #-}
-{-# LANGUAGE DeriveGeneric          #-}
-{-# LANGUAGE FlexibleContexts       #-}
-{-# LANGUAGE FlexibleInstances      #-}
-{-# LANGUAGE MultiParamTypeClasses  #-}
-{-# LANGUAGE OverloadedStrings      #-}
-{-# LANGUAGE TemplateHaskell        #-}
-{-# LANGUAGE TypeFamilies           #-}
-{-# LANGUAGE TypeFamilyDependencies #-}
-{-# LANGUAGE TypeOperators          #-}
-{-# LANGUAGE UndecidableInstances   #-}
+{-# LANGUAGE DataKinds             #-}
+{-# LANGUAGE DeriveGeneric         #-}
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TypeOperators         #-}
+{-# LANGUAGE UndecidableInstances  #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module LibSpec where
 
-import           Test.Hspec
-import           Test.Hspec.Core.Util
-
 import           Data.Text
 import           Data.Vinyl
-import qualified Data.Vinyl.Functor            as VF
 import           Data.Vinyl.Generics.Transform
-import           Generics.SOP
 import qualified Generics.SOP                  as S
-import           GHC.Exception                 (SomeException)
 import qualified GHC.Generics                  as G
+import           Test.Hspec
 
-data MyPlainRecord f = MPR {
+data MyPlainRecord = MPR {
   age      :: Int,
   iscool   :: Bool,
   yearbook :: Text
 } deriving (Show, G.Generic)
 
-instance S.Generic (MyPlainRecord f)
-deriveVinyl ''MyPlainRecord
+instance S.Generic MyPlainRecord
+instance S.HasDatatypeInfo MyPlainRecord
 
-data MySubsetRecord f = MSR {
-  _age      :: Int,
-  _yearbook :: Text
-} deriving (Show, G.Generic)
+data MySubsetRecord = MSR {
+  age      :: Int,
+  yearbook :: Text
+} deriving (Eq, Show, G.Generic)
 
-instance S.Generic (MySubsetRecord f)
-deriveVinyl ''MySubsetRecord
-
-derivePlain "_"
+instance S.Generic MySubsetRecord
 
 main :: IO ()
 main = hspec spec
@@ -53,28 +40,21 @@ spec =
     it "works" $ do
       True `shouldBe` True
     it "test1" $ do
-      res <- safeTry $ print test1
-      (formatEx res) `shouldBe` (NoExceptionRaised)
+      (toVinyl r1) `shouldBe` r2
     it "test2" $ do
-      res <- safeTry $ print test2
-      (formatEx res) `shouldBe` (NoExceptionRaised)
+      (fromVinyl $ subset (toVinyl r1)) `shouldBe` r3
 
-
-data ExceptionStatus = ExceptionRaised String | NoExceptionRaised deriving (Show, Eq)
-
-formatEx :: Either SomeException b -> ExceptionStatus
-formatEx (Left e)  = ExceptionRaised (formatException e)
-formatEx (Right _) = NoExceptionRaised
-
-r1 :: MyPlainRecord Int
+r1 :: MyPlainRecord
 r1 = MPR { age = 23, iscool = True, yearbook = "You spin me right round"}
-
-test1 = toRecElField r1
 
 subset ::
   Rec ElField '[("age" ::: Int), ("iscool" ::: Bool), ("yearbook" ::: Text)]
   -> Rec ElField '[("age" ::: Int), ("yearbook" ::: Text)]
 subset = rcast
 
-test2 :: MySubsetRecord Int
-test2 = toPlainRecord $ subset test1
+
+r2 :: Rec ElField '[("age" ::: Int), ("iscool" ::: Bool), ("yearbook" ::: Text)]
+r2 = xrec (23, True, "You spin me right round")
+
+r3 :: MySubsetRecord
+r3 = MSR {age = 23, yearbook = "You spin me right round"}
