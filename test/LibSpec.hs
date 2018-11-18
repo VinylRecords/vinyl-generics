@@ -99,7 +99,7 @@ spec =
 
 
 r1 :: MyPlainRecord
-r1 = MPR { age = 23, iscool = True, yearbook = "You spin me right round"}
+r1 = MPR { age = 23, iscool = True, yearbook = "!123!"}
 
 subset ::
   Rec ElField '[("age" ::: Int), ("iscool" ::: Bool), ("yearbook" ::: Text)]
@@ -108,10 +108,10 @@ subset = rcast
 
 
 r2 :: Rec ElField '[("age" ::: Int), ("iscool" ::: Bool), ("yearbook" ::: Text)]
-r2 = xrec (23, True, "You spin me right round")
+r2 = xrec (23, True, "!123!")
 
 r3 :: MySubsetRecord
-r3 = MSR {age = 23, yearbook = "You spin me right round"}
+r3 = MSR {age = 23, yearbook = "!123!"}
 
 r4 :: CartUsers
 r4 =
@@ -149,3 +149,5 @@ r7 =
     , _City          = "ABC"
     , _Country = "XYZ"
   }
+
+
