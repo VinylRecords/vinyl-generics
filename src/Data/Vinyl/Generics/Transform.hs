@@ -1,5 +1,5 @@
--- | Typeclass and an instance generator for the typeclass to convert
--- plain Haskell records to their vinyl representation.
+-- | Polymorphic functions to convert plain Haskell records
+--  to their vinyl representation and back.
 {-# LANGUAGE DataKinds              #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}

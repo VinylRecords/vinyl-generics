@@ -10,7 +10,6 @@
 {-# LANGUAGE UndecidableInstances  #-}
 module LibSpec where
 
-import           Data.Functor.Identity         (Identity)
 import           Data.Text
 import           Data.Vinyl
 import           Data.Vinyl.Generics.Transform
@@ -35,48 +34,41 @@ data MySubsetRecord = MSR {
 
 instance S.Generic MySubsetRecord
 
-data CartUsersT f = CartUsers {
-  _Email         :: Columnar f Text,
-  _First_name    :: Columnar f Text,
-  _Last_name     :: Columnar f Text,
-  _Is_member     :: Columnar f Bool,
-  _Days_in_queue :: Columnar f Int
+data CartUsers = CartUsers {
+  _Email         ::  Text,
+  _First_name    ::  Text,
+  _Last_name     ::  Text,
+  _Is_member     ::  Bool,
+  _Days_in_queue ::  Int
 } deriving (G.Generic)
 
-type CartUsers = CartUsersT Identity
 deriving instance Show CartUsers
 instance S.Generic CartUsers
 instance S.HasDatatypeInfo CartUsers
 
 
-type family Columnar (f :: * -> *) x where
-    Columnar Identity x = x
-    Columnar f x = f x
-
-data SubsetCartUsersT f = SubsetCartUsers {
-  _Email      :: Columnar f Text,
-  _First_name :: Columnar f Text,
-  _Last_name  :: Columnar f Text
+data SubsetUsers = SubsetCartUsers {
+  _Email      ::  Text,
+  _First_name ::  Text,
+  _Last_name  ::  Text
 } deriving (G.Generic)
 
-type SubsetUsers = SubsetCartUsersT Identity
 instance S.Generic SubsetUsers
 instance S.HasDatatypeInfo SubsetUsers
 deriving instance Show SubsetUsers
 deriving instance Eq SubsetUsers
 
-data SupersetCartUsersT f = SupersetCartUsers {
-  _Email         :: Columnar f Text,
-  _First_name    :: Columnar f Text,
-  _Last_name     :: Columnar f Text,
-  _Is_member     :: Columnar f Bool,
-  _Days_in_queue :: Columnar f Int,
-  _Zipcode       :: Columnar f Text,
-  _City          :: Columnar f Text,
-  _Country       :: Columnar f Text
+data SupersetUsers = SupersetCartUsers {
+  _Email         ::  Text,
+  _First_name    ::  Text,
+  _Last_name     ::  Text,
+  _Is_member     ::  Bool,
+  _Days_in_queue ::  Int,
+  _Zipcode       ::  Text,
+  _City          ::  Text,
+  _Country       ::  Text
 } deriving (G.Generic)
 
-type SupersetUsers = SupersetCartUsersT Identity
 deriving instance Show SupersetUsers
 instance S.Generic SupersetUsers
 instance S.HasDatatypeInfo SupersetUsers
@@ -145,9 +137,9 @@ r7 =
     ,  _Last_name     = "Doe"
     ,  _Is_member     = True
     ,  _Days_in_queue = 42
-    , _Zipcode       = "ABCD1234"
-    , _City          = "ABC"
-    , _Country = "XYZ"
+    , _Zipcode        = "ABCD1234"
+    , _City           = "ABC"
+    , _Country        = "XYZ"
   }
 
 
