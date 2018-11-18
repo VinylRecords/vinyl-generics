@@ -22,12 +22,11 @@ library
   build-depends:       base >= 4.7 && < 5
                      , generics-sop 
                      , vinyl >= 0.10
-                     , text 
                      , records-sop
 
 test-suite spec
   default-language:    Haskell2010
-  ghc-options:         -Wall -ddump-splices -ddump-to-file
+  ghc-options:         -Wall
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
@@ -40,7 +39,7 @@ test-suite spec
                      , generics-sop 
                      , text
                      , vinyl
-                     
+                     , records-sop
                      
 
 source-repository head

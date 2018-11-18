@@ -7,8 +7,8 @@
 {-# LANGUAGE TypeOperators          #-}
 {-# LANGUAGE UndecidableInstances   #-}
 module Data.Vinyl.Generics.Transform(
-  toVinyl,
-  fromVinyl
+    toVinyl
+  , fromVinyl
 ) where
 
 import           Data.Vinyl
@@ -17,31 +17,31 @@ import           Generics.SOP.NP
 import qualified Generics.SOP.Record as SR
 import           GHC.TypeLits
 
-class RMap' rs where
+class NatTrans rs where
   rmap' :: Rec SR.P rs -> Rec ElField rs
 
-instance RMap' '[] where
+instance NatTrans '[] where
   rmap' RNil = RNil
 
-instance (RMap' xs, x ~ '(s, t), KnownSymbol s) => RMap' (x ': xs) where
+instance (NatTrans xs, x ~ '(s, t), KnownSymbol s) => NatTrans (x ': xs) where
   rmap' ((SR.P x) :& xs) =  (Field x) :& rmap' xs
 
 
-class RMap'' rs ys | rs -> ys where
-  rmap'' :: Rec ElField rs -> NP I ys
+class Cata rs ys | rs -> ys where
+  recToNP :: Rec ElField rs -> NP I ys
 
-instance RMap'' '[] '[] where
-  rmap'' RNil = Nil
+instance Cata '[] '[] where
+  recToNP RNil = Nil
 
-instance (RMap'' xs ys, y ~ SR.Snd x) => RMap'' (x ': xs) (y ': ys) where
-  rmap'' ((Field x) :& xs) =  (I x) :* rmap'' xs
+instance (Cata xs ys, y ~ SR.Snd x) => Cata (x ': xs) (y ': ys) where
+  recToNP ((Field x) :& xs) =  (I x) :* recToNP xs
 
-toVinyl :: (SR.IsRecord a r, RMap' r) => a -> Rec ElField r
+toVinyl :: (SR.IsRecord a rs, NatTrans rs) => a -> Rec ElField rs
 toVinyl r = rmap' (cata_NP RNil (:&) np)
     where
       np = SR.toRecord r
 
 fromVinyl ::
   (Generic a,  Code a ~ ts,
-  ts ~ '[ys], RMap'' rs ys) => Rec ElField rs -> a
-fromVinyl = (to . SOP . Z . rmap'')
+  ts ~ '[ys], Cata rs ys) => Rec ElField rs -> a
+fromVinyl = (to . SOP . Z . recToNP)
