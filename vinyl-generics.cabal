@@ -40,7 +40,7 @@ test-suite spec
                      , text
                      , vinyl
                      , records-sop
-                     
+                     , aeson
 
 source-repository head
   type:     git
