@@ -1,14 +1,10 @@
 {-# LANGUAGE DataKinds             #-}
 {-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TypeApplications      #-}
-{-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE TypeOperators         #-}
-{-# LANGUAGE TypeSynonymInstances  #-}
-{-# LANGUAGE UndecidableInstances  #-}
 module LibSpec where
 
 import           Data.Aeson
@@ -28,6 +24,9 @@ data MyPlainRecord = MPR {
 instance S.Generic MyPlainRecord
 instance S.HasDatatypeInfo MyPlainRecord
 instance ToJSON MyPlainRecord
+
+data MyType = MyType { bike :: Bool, skateboard :: Bool } deriving (Show, G.Generic)
+instance ToJSON MyType
 
 data MyPlainRecord2 = MPR2 {
   age      :: Int,
@@ -175,9 +174,6 @@ r1JSON :: Value
 r1JSON = object [ "age" .= (23 :: Int)
                 , "iscool" .= True
                 , "yearbook" .= ("You spin me right round" :: Text) ]
-
-data MyType = MyType { bike :: Bool, skateboard :: Bool } deriving (Show, G.Generic)
-instance ToJSON MyType
 
 r3' :: Rec ElField '[ "age" ::: Int
                    , "iscool" ::: Bool
