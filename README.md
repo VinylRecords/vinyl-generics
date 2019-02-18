@@ -2,11 +2,11 @@
 
 [![Build Status](https://travis-ci.org/VinylRecords/vinyl-generics.png)](https://travis-ci.org/VinylRecords/vinyl-generics)
 
-Convert plain Haskell records to [vinyl](https://hackage.haskell.org/package/vinyl) and vice versa, via `GHC.Generics` and `generics-sop`.
+Convert plain Haskell records to [vinyl](https://hackage.haskell.org/package/vinyl) and vice versa, via `GHC.Generics` and `generics-sop`/`records-sop`.
 
 ## Potential Use Cases
-* Reading an external data source (database query, results of API requests etc.) as a list of plain Haskell records and converting it to a list of `vinyl` records (for subsequent conversion to a [data-frame](https://hackage.haskell.org/package/Frames)).
-* Serializing a `data-frame`/list of `vinyl` records to JSON.
+* Reading an external data source (database query, results of API requests etc.) as a list of plain Haskell records and converting it to a list of `vinyl` records (for subsequent conversion to an in-memory [data-frame](https://hackage.haskell.org/package/Frames)).
+* Serializing a `Frame`/list of `vinyl` records to JSON.
 * Adding/removing fields from a plain record using `vinyl` as an intermediate representation.
 
 ## Usage
@@ -56,7 +56,7 @@ instance S.HasDatatypeInfo MyPlainRecord2
 
 ```
 
-In the above, let `MyPlainRecord` be the format in which data is being read from an external source. We also read some additional field `additionalFields` (say from a CSV using `Frames`): 
+In the above, let `MyPlainRecord` be the format in which data is being read from an external source. We also read some additional data `additionalFields` (say from a CSV using `Frames`): 
 
 ```haskell
 -- some mock data
