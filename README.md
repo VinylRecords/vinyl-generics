@@ -92,6 +92,6 @@ instance ToJSON MyType
 Have a look at `test/LibSpec.hs` for more usage examples.
 
 ## Known Limitations
-This library in it's current form works only with `vinyl` records with type-level field names (i.e. use the `ElField` interpretation functor).
+This library, in its current form, works only with `vinyl` records with type-level field names (i.e. use the `ElField` interpretation functor).
 Future versions hope to tackle records with anonymous fields (e.g. heterogenous lists making use of the `Identity` functor) as well.
 
