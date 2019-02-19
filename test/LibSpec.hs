@@ -91,7 +91,7 @@ main =
   hspec spec
 
 spec :: Spec
-spec = --hspec $ do
+spec =
   describe "Lib" $ do
     it "test1: Converting a plain record to vinyl" $ do
       (toVinyl r1) `shouldBe` r2
