@@ -11,7 +11,7 @@ maintainer:          gagandeepbhatia.in@gmail.com
 copyright:           2018 Gagandeep Bhatia
 category:            Data, Generics
 build-type:          Simple
-extra-source-files:  README.md
+extra-source-files:  README.md CHANGELOG.md
 cabal-version:       >=1.10
 
 library
